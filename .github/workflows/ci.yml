@@ -13,8 +13,8 @@ jobs:
         continue-on-error: true
 
       - name: Run Ansible scan with SARIF output
+        uses: xlab-steampunk/spotter-action@master
         with:
-          uses: xlab-steampunk/spotter-action@master
           sarif_file: example.sarif
         continue-on-error: true
       - name: Check Sarif
