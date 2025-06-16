@@ -1,0 +1,16 @@
+name: Minimal CI/CD workflow for Steampunk Spotter
+on: [push]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: xlab-steampunk/spotter-action@v4
+        env:
+          SPOTTER_TOKEN: ${{ secrets.SPOTTER_TOKEN }}
+      - name: Run Ansible scan with SARIF output
+        uses: ./
+        with:
+          sarif_file: example.sarif
+        continue-on-error: true
+      
