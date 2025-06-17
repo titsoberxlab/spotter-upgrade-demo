@@ -1,5 +1,15 @@
-name: Minimal CI/CD workflow for Steampunk Spotter
-on: [push]
+
+
+name: Spotter CI Pipeline
+permissions:
+  security-events: write
+  actions: read
+  contents: read
+
+
+on:
+  pull_request_target:
+    branches: [main]
 jobs:
   run:
     runs-on: ubuntu-latest
