@@ -1,0 +1,14 @@
+---
+- name: Include task file with variables
+  include: my_tasks.yml var1=value1 var2=value2
+  
+- name: Get AliCloud instance facts
+  ali_instance_facts:
+    region: cn-hangzhou
+  register: ali_facts
+
+- name: Deploy via Helm (legacy module)
+  helm:
+    name: mychart
+    chart: ./charts/mychart
+    namespace: default

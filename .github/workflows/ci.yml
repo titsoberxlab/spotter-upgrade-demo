@@ -16,6 +16,11 @@ jobs:
           SPOTTER_API_TOKEN: ${{ secrets.SPOTTER_TOKEN }}
         with:
           ansible_version: 2.15
+#          profile: security
+#          skip_checks: E001
+#          project_id: 564543543
+#          ansible_version: 2.15
+
           sarif_file: example.sarif
         continue-on-error: true
 
