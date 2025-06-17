@@ -26,6 +26,8 @@ jobs:
           ansible_version: 2.15
           sarif_file: example.sarif
         continue-on-error: true
+      - name: Print sarif
+        run: cat example.sarif
       - name: Check Sarif
         uses: github/codeql-action/upload-sarif@v3
         with:
