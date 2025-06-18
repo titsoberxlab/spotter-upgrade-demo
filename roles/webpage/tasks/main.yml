@@ -1,12 +1,12 @@
 ---
 - name: Create the destination directory
-  file:
+  ansible.builtin.file:
     path: /tmp/dockerbuild/
     state: directory
     follow: false
 
 - name: Install docker-py
-  pip:
+  ansible.builtin.pip:
     name:
       - docker-py
       # python2.7 compat
@@ -16,7 +16,7 @@
     editable: false
 
 - name: Copy over build files
-  template:
+  ansible.builtin.template:
     src: "{{ item }}"
     dest: /tmp/dockerbuild/
   with_items:
@@ -24,7 +24,7 @@
     - index.html
 
 - name: Build the image
-  docker_image:
+  community.docker.docker_image:
     name: local/webpage
     path: /tmp/dockerbuild/
     state: build
@@ -32,7 +32,7 @@
   register: image_build
 
 - name: Run the container
-  docker_container: &container_args
+  community.docker.docker_container: &container_args
     name: webpage
     image: local/webpage
     ports:
@@ -42,7 +42,7 @@
   register: container_start
 
 - name: Restart the container if necessary
-  docker_container:
+  community.docker.docker_container:
     <<: *container_args
     state: restarted
   when: image_build is changed and container_start is not changed
