@@ -1,22 +1,22 @@
 ---
 - name: Include distro-specific variables
-  include_vars:
+  ansible.builtin.include_vars:
     file: "{{ ansible_distribution }}.yml"
 
 - name: Run distro-specific pre tasks (CentOS)
   block:
     - name: Use epel
-      package:
+      ansible.builtin.package:
         name: epel-release
         state: present
   when: ansible_distribution == "CentOS"
 
 - name: Install base system packages
-  package:
+  ansible.builtin.package:
     name: "{{ packages }}"
 
 - name: Increase inotify limit
-  sysctl:
+  ansible.posix.sysctl:
     name: fs.inotify.max_user_watches
     value: "524288"
     sysctl_file: /etc/sysctl.d/50-inotify.conf
@@ -25,13 +25,13 @@
 - name: Run distro-specific post tasks (CentOS)
   block:
     - name: Make sure firewalld is started
-      service:
+      ansible.builtin.service:
         name: firewalld
         state: started
         enabled: true
 
     - name: Whitelist services
-      firewalld:
+      ansible.posix.firewalld:
         service: "{{ item }}"
         permanent: true
         immediate: true
@@ -42,26 +42,26 @@
         - https
 
     - name: Disable selinux  # sorry
-      selinux:
+      ansible.posix.selinux:
         state: disabled
   when: ansible_distribution == "CentOS"
 
 - name: Run distro-specific post tasks (Debian)
   block:
     - name: Make sure ufw is started
-      service:
+      ansible.builtin.service:
         name: ufw
         state: started
         enabled: true
 
     - name: Blacklist everything incoming
-      ufw:
+      community.general.ufw:
         state: enabled
         direction: incoming
         policy: deny
 
     - name: Whitelist services
-      ufw:
+      community.general.ufw:
         rule: allow
         port: "{{ item }}"
         proto: tcp

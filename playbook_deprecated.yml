@@ -3,12 +3,12 @@
   include: my_tasks.yml var1=value1 var2=value2
   
 - name: Get AliCloud instance facts
-  ali_instance_facts:
+  community.general.ali_instance_facts:
     region: cn-hangzhou
   register: ali_facts
 
 - name: Deploy via Helm (legacy module)
-  helm:
+  community.general.helm:
     name: mychart
     chart: ./charts/mychart
     namespace: default
